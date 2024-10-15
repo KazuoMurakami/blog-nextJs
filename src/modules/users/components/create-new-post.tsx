@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/select";
 import { ArrowLeft, Save } from "lucide-react";
 import { userRole } from "@/modules/auth/actions/auth-user";
+import { toast } from "@/hooks/use-toast";
 
 export default function CreateNewPost() {
   const [title, setTitle] = useState("");
@@ -53,9 +54,10 @@ export default function CreateNewPost() {
         throw new Error("Erro ao criar o post");
       }
 
-      const data = await response.json();
-      console.log("Post criado com sucesso", data);
-
+      toast({
+        title: "Post saved",
+        description: "Your blog post has been successfully saved.",
+      });
       // Após criar o post, você pode redirecionar ou limpar o formulário
     } catch (error) {
       console.error("Erro na criação do post:", error);
