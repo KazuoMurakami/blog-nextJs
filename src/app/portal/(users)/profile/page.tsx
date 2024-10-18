@@ -23,8 +23,11 @@ const user = {
 export default function UserProfile() {
   const [activeTab, setActiveTab] = useState("posts");
   const [posts, setPost] = useState<Post[] | null>(null); // Estado para armazenar o usuário
-  // const [loading, setLoading] = useState(true); // Estado para o carregamento
+  const [isExpanded, setIsExpanded] = useState(false);
 
+  const toggleReadMore = () => {
+    setIsExpanded(!isExpanded);
+  };
   // useEffect para buscar os dados do usuário da API
   useEffect(() => {
     const fetchUserData = async () => {
@@ -106,9 +109,17 @@ export default function UserProfile() {
                       <CardHeader>
                         <CardTitle>{post.title}</CardTitle>
                       </CardHeader>
-                      <CardContent>
-                        <p>{post.content.substring(0, 100)}...</p>
-                        <Button variant="link" className="p-0 h-auto mt-2">
+                      <CardContent className="">
+                        <p className="break-words">
+                          {isExpanded
+                            ? post.content
+                            : `${post.content.substring(0, 100)}...`}
+                        </p>
+                        <Button
+                          variant="link"
+                          className="p-0 h-auto mt-2"
+                          onClick={toggleReadMore}
+                        >
                           Read more
                         </Button>
                       </CardContent>
