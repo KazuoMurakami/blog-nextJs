@@ -23,10 +23,10 @@ const user = {
 export default function UserProfile() {
   const [activeTab, setActiveTab] = useState("posts");
   const [posts, setPost] = useState<Post[] | null>(null); // Estado para armazenar o usuário
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [expandedPostId, setExpandedPostId] = useState<string | null>(null);
 
-  const toggleReadMore = () => {
-    setIsExpanded(!isExpanded);
+  const toggleReadMore = (postId: string) => {
+    setExpandedPostId(expandedPostId === postId ? null : postId);
   };
   // useEffect para buscar os dados do usuário da API
   useEffect(() => {
@@ -109,19 +109,26 @@ export default function UserProfile() {
                       <CardHeader>
                         <CardTitle>{post.title}</CardTitle>
                       </CardHeader>
-                      <CardContent className="">
+                      <CardContent>
                         <p className="break-words">
-                          {isExpanded
+                          {expandedPostId === post.id
                             ? post.content
                             : `${post.content.substring(0, 100)}...`}
                         </p>
-                        <Button
-                          variant="link"
-                          className="p-0 h-auto mt-2"
-                          onClick={toggleReadMore}
-                        >
-                          Read more
-                        </Button>
+
+                        {post.content.length > 100 ? (
+                          <Button
+                            variant="link"
+                            className="p-0 h-auto mt-2"
+                            onClick={() => toggleReadMore(post.id)}
+                          >
+                            {expandedPostId === post.id
+                              ? "Read less"
+                              : "Read more"}
+                          </Button>
+                        ) : (
+                          ""
+                        )}
                       </CardContent>
                     </Card>
                   ))
